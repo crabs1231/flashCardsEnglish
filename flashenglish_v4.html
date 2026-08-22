@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>FlashEnglish · 500 palabras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#22312A;
+    --bg-2:#1B2620;
+    --paper:#F7F1DF;
+    --paper-2:#EAE0C4;
+    --paper-3:#DED2AE;
+    --ink:#22261E;
+    --muted:#9BB0A2;
+    --muted-2:#5E7267;
+    --accent:#E8A33D;
+    --accent-ink:#3A2A0E;
+    --good:#5FAE63;
+    --good-ink:#173318;
+    --bad:#DA5B54;
+    --bad-ink:#3C1310;
+    --radius:20px;
+    --shadow:0 14px 34px rgba(0,0,0,.38);
+    --font-display:'Fraunces',serif;
+    --font-body:'Work Sans',sans-serif;
+    --font-mono:'Space Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(255,255,255,.05), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(255,255,255,.04), transparent 45%),
+      linear-gradient(180deg, var(--bg), var(--bg-2));
+    color:var(--paper);
+    font-family:var(--font-body);
+    -webkit-tap-highlight-color: transparent;
+    display:flex;
+    justify-content:center;
+  }
+  #app{
+    width:100%;
+    max-width:520px;
+    min-height:100vh;
+    padding:20px 16px 40px;
+    display:flex;
+    flex-direction:column;
+  }
+  .topbar{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:18px;
+    padding:0 4px;
+  }
+  .brand{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:.2px;
+    color:var(--paper);
+    background:none;
+    border:none;
+    padding:0;
+    cursor:pointer;
+  }
+  .brand span{color:var(--accent);}
+  .reset-link{
+    font-family:var(--font-body);
+    font-size:12px;
+    color:var(--muted);
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-decoration:underline;
+    text-underline-offset:3px;
+    padding:6px;
+  }
+  #view{flex:1; display:flex; flex-direction:column;}
+
+  /* ---------- HOME ---------- */
+  .home-lede{
+    font-family:var(--font-body);
+    color:var(--muted);
+    font-size:14px;
+    margin:0 4px 22px;
+    line-height:1.5;
+  }
+  .section-label{
+    font-family:var(--font-mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    color:var(--muted);
+    margin:0 4px 10px;
+  }
+  .mode-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:24px;
+  }
+  .mode-card{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:var(--radius);
+    padding:18px 14px;
+    text-align:left;
+    border:2px solid transparent;
+    cursor:pointer;
+    font-family:var(--font-body);
+    box-shadow:var(--shadow);
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .mode-card:active{transform:scale(.97);}
+  .mode-card.selected{border-color:var(--accent);}
+  .mode-card .glyph{font-size:26px; display:block; margin-bottom:10px;}
+  .mode-card .title{font-weight:700; font-size:15px; margin-bottom:4px;}
+  .mode-card .desc{font-size:12px; color:var(--muted-2); line-height:1.4;}
+
+  .pill-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:0 4px 22px;
+  }
+  .pill{
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    color:var(--paper);
+    border:1.5px solid rgba(255,255,255,.14);
+    cursor:pointer;
+  }
+  .pill.selected{
+    background:var(--accent);
+    color:var(--accent-ink);
+    border-color:var(--accent);
+  }
+
+  .btn-primary{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:16px;
+    background:var(--accent);
+    color:var(--accent-ink);
+    border:none;
+    border-radius:14px;
+    padding:16px;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    margin:6px 4px 0;
+  }
+  .btn-primary:active{transform:scale(.98);}
+  .btn-secondary{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:14px;
+    background:transparent;
+    color:var(--paper);
+    border:1.5px solid rgba(255,255,255,.22);
+    border-radius:14px;
+    padding:13px;
+    cursor:pointer;
+    margin:10px 4px 0;
+  }
+  .stats-line{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+    margin:18px 4px 0;
+    text-align:center;
+  }
+  .pool-warning{
+    font-family:var(--font-body);
+    font-size:12px;
+    color:var(--accent);
+    margin:0 4px 14px;
+  }
+
+  /* ---------- ROUND ---------- */
+  .round-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--muted);
+    margin:0 4px 22px;
+  }
+  .round-header .timer{color:var(--paper); font-weight:700;}
+  .round-header .score-live{color:var(--good);}
+
+  .card-stack{
+    position:relative;
+    margin:6px 10px 26px;
+    height:250px;
+  }
+  .card-stack .ghost{
+    position:absolute;
+    inset:0;
+    background:var(--paper-2);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .card-stack .ghost.g1{transform:rotate(3deg) translateY(6px); background:var(--paper-3); z-index:1;}
+  .card-stack .ghost.g2{transform:rotate(-2.5deg) translateY(3px); background:var(--paper-2); z-index:2;}
+  .card{
+    position:absolute;
+    inset:0;
+    z-index:3;
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    border:3px solid transparent;
+    display:flex;
+    flex-direction:column;
+    padding:18px;
+    transition:border-color .15s ease, border-width .15s ease, box-shadow .15s ease, transform .12s ease;
+  }
+  .card.is-correct{
+    border:6px solid var(--good);
+    box-shadow:0 0 0 6px rgba(95,174,99,.18), var(--shadow);
+    animation:pop .28s ease;
+  }
+  .card.is-wrong{border-color:var(--bad); animation:shake .32s ease;}
+  @keyframes pop{
+    0%{transform:scale(1);}
+    45%{transform:scale(1.035);}
+    100%{transform:scale(1);}
+  }
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+  .card-holes{
+    position:absolute;
+    left:10px; top:20px; bottom:20px;
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .card-holes span{
+    width:10px; height:10px; border-radius:50%;
+    background:var(--bg);
+    box-shadow:inset 0 1px 3px rgba(0,0,0,.4);
+  }
+  .level-tag{
+    align-self:flex-start;
+    font-family:var(--font-mono);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:var(--muted-2);
+    background:var(--paper-2);
+    padding:4px 9px;
+    border-radius:999px;
+    margin-left:22px;
+  }
+  .card-body{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  .card-word{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:38px;
+    color:var(--ink);
+    word-break:break-word;
+  }
+  .card-emoji{font-size:84px; line-height:1;}
+
+  .feedback-line{
+    min-height:20px;
+    text-align:center;
+    font-family:var(--font-body);
+    font-size:13px;
+    color:var(--muted);
+    margin:0 4px 10px;
+  }
+  .feedback-line.correct{color:var(--good);}
+  .feedback-line.wrong{color:var(--bad);}
+  .feedback-line b{color:var(--paper);}
+
+  .answer-row{display:flex; gap:8px; margin:0 4px;}
+  .input-answer{
+    flex:1;
+    font-family:var(--font-body);
+    font-size:16px;
+    padding:15px 16px;
+    border-radius:14px;
+    border:1.5px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.06);
+    color:var(--paper);
+    outline:none;
+  }
+  .input-answer:focus{border-color:var(--accent);}
+  .input-answer::placeholder{color:var(--muted-2);}
+  .btn-check{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:15px;
+    padding:0 20px;
+    border-radius:14px;
+    border:none;
+    background:var(--accent);
+    color:var(--accent-ink);
+    cursor:pointer;
+  }
+  .btn-check:disabled{opacity:.5;}
+  .next-hint{
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--muted-2);
+    margin-top:12px;
+  }
+  .answer-reveal-wrap{
+    margin:0 4px 14px;
+    text-align:center;
+  }
+  .answer-reveal{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:28px;
+    color:var(--bad-ink);
+    background:var(--paper);
+    border-radius:14px;
+    padding:14px 16px;
+    box-shadow:var(--shadow);
+    transition:color .15s ease, text-shadow .15s ease;
+    word-break:break-word;
+  }
+  .answer-reveal.hidden-text{
+    color:transparent;
+    text-shadow:0 0 16px rgba(34,38,30,.65);
+    user-select:none;
+  }
+  .btn-toggle-answer{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:12.5px;
+    background:transparent;
+    color:var(--paper);
+    border:1.5px solid rgba(255,255,255,.24);
+    border-radius:999px;
+    padding:7px 14px;
+    margin-top:10px;
+    cursor:pointer;
+  }
+
+  /* ---------- RESULT ---------- */
+  .result-hero{
+    text-align:center;
+    margin:10px 4px 24px;
+  }
+  .result-hero .big{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:52px;
+    color:var(--accent);
+    line-height:1;
+  }
+  .result-hero .sub{
+    font-family:var(--font-body);
+    font-size:14px;
+    color:var(--muted);
+    margin-top:8px;
+  }
+  .result-stats{
+    display:flex;
+    gap:10px;
+    margin:0 4px 22px;
+  }
+  .result-stat{
+    flex:1;
+    background:rgba(255,255,255,.06);
+    border:1.5px solid rgba(255,255,255,.1);
+    border-radius:14px;
+    padding:12px;
+    text-align:center;
+  }
+  .result-stat .v{font-family:var(--font-mono); font-weight:700; font-size:18px; color:var(--paper);}
+  .result-stat .l{font-family:var(--font-body); font-size:11px; color:var(--muted); margin-top:2px;}
+  .missed-wrap{margin:0 4px 8px;}
+  .missed-list{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+  .missed-chip{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:10px;
+    padding:8px 11px;
+    font-size:12.5px;
+    font-family:var(--font-body);
+  }
+  .missed-chip b{font-weight:700;}
+  .missed-chip .es{color:var(--muted-2);}
+  .empty-mistakes{
+    font-family:var(--font-body);
+    font-size:13px;
+    color:var(--good);
+    margin:0 4px;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <button class="brand" id="brandBtn" title="Volver al inicio">Flash<span>English</span></button>
+    <button class="reset-link" id="resetBtn">reiniciar progreso</button>
+  </div>
+  <div id="view"></div>
+</div>
+
+<script id="dictionary-data" type="application/json">[{"en":"one","es":"uno","emoji":"1️⃣","level":"basico"},{"en":"two","es":"dos","emoji":"2️⃣","level":"basico"},{"en":"three","es":"tres","emoji":"3️⃣","level":"basico"},{"en":"four","es":"cuatro","emoji":"4️⃣","level":"basico"},{"en":"five","es":"cinco","emoji":"5️⃣","level":"basico"},{"en":"six","es":"seis","emoji":"6️⃣","level":"basico"},{"en":"seven","es":"siete","emoji":"7️⃣","level":"basico"},{"en":"eight","es":"ocho","emoji":"8️⃣","level":"basico"},{"en":"nine","es":"nueve","emoji":"9️⃣","level":"basico"},{"en":"ten","es":"diez","emoji":"🔟","level":"basico"},{"en":"eleven","es":"once","emoji":"","level":"basico"},{"en":"twelve","es":"doce","emoji":"","level":"basico"},{"en":"thirteen","es":"trece","emoji":"","level":"basico"},{"en":"fourteen","es":"catorce","emoji":"","level":"basico"},{"en":"fifteen","es":"quince","emoji":"","level":"basico"},{"en":"sixteen","es":"dieciseis","emoji":"","level":"basico"},{"en":"seventeen","es":"diecisiete","emoji":"","level":"basico"},{"en":"eighteen","es":"dieciocho","emoji":"","level":"basico"},{"en":"nineteen","es":"diecinueve","emoji":"","level":"basico"},{"en":"twenty","es":"veinte","emoji":"","level":"basico"},{"en":"thirty","es":"treinta","emoji":"","level":"basico"},{"en":"forty","es":"cuarenta","emoji":"","level":"basico"},{"en":"fifty","es":"cincuenta","emoji":"","level":"basico"},{"en":"red","es":"rojo","emoji":"🔴","level":"basico"},{"en":"orange","es":"naranja","emoji":"🟠","level":"basico"},{"en":"yellow","es":"amarillo","emoji":"🟡","level":"basico"},{"en":"green","es":"verde","emoji":"🟢","level":"basico"},{"en":"blue","es":"azul","emoji":"🔵","level":"basico"},{"en":"purple","es":"morado","emoji":"🟣","level":"basico"},{"en":"black","es":"negro","emoji":"⚫","level":"basico"},{"en":"white","es":"blanco","emoji":"⚪","level":"basico"},{"en":"brown","es":"marron","emoji":"🟤","level":"basico"},{"en":"pink","es":"rosado","emoji":"","level":"basico"},{"en":"gray","es":"gris","emoji":"","level":"basico"},{"en":"mother","es":"madre","emoji":"👩","level":"basico"},{"en":"father","es":"padre","emoji":"👨","level":"basico"},{"en":"sister","es":"hermana","emoji":"👧","level":"basico"},{"en":"brother","es":"hermano","emoji":"👦","level":"basico"},{"en":"daughter","es":"hija","emoji":"","level":"basico"},{"en":"son","es":"hijo","emoji":"","level":"basico"},{"en":"grandmother","es":"abuela","emoji":"👵","level":"basico"},{"en":"grandfather","es":"abuelo","emoji":"👴","level":"basico"},{"en":"baby","es":"bebé","emoji":"👶","level":"basico"},{"en":"aunt","es":"tia","emoji":"","level":"basico"},{"en":"uncle","es":"tio","emoji":"","level":"basico"},{"en":"wife","es":"esposa","emoji":"","level":"basico"},{"en":"husband","es":"esposo","emoji":"","level":"basico"},{"en":"family","es":"familia","emoji":"👨‍👩‍👧‍👦","level":"basico"},{"en":"head","es":"cabeza","emoji":"","level":"basico"},{"en":"hair","es":"cabello","emoji":"","level":"basico"},{"en":"eye","es":"ojo","emoji":"👁️","level":"basico"},{"en":"ear","es":"oreja","emoji":"👂","level":"basico"},{"en":"nose","es":"nariz","emoji":"👃","level":"basico"},{"en":"mouth","es":"boca","emoji":"👄","level":"basico"},{"en":"hand","es":"mano","emoji":"✋","level":"basico"},{"en":"finger","es":"dedo","emoji":"","level":"basico"},{"en":"arm","es":"brazo","emoji":"","level":"basico"},{"en":"leg","es":"pierna","emoji":"🦵","level":"basico"},{"en":"foot","es":"pie","emoji":"🦶","level":"basico"},{"en":"tooth","es":"diente","emoji":"🦷","level":"basico"},{"en":"heart","es":"corazón","emoji":"❤️","level":"basico"},{"en":"back","es":"espalda","emoji":"","level":"basico"},{"en":"neck","es":"cuello","emoji":"","level":"basico"},{"en":"dog","es":"perro","emoji":"🐶","level":"basico"},{"en":"cat","es":"gato","emoji":"🐱","level":"basico"},{"en":"bird","es":"pájaro","emoji":"🐦","level":"basico"},{"en":"fish","es":"pez","emoji":"🐟","level":"basico"},{"en":"horse","es":"caballo","emoji":"🐴","level":"basico"},{"en":"cow","es":"vaca","emoji":"🐮","level":"basico"},{"en":"pig","es":"cerdo","emoji":"🐷","level":"basico"},{"en":"sheep","es":"oveja","emoji":"🐑","level":"basico"},{"en":"chicken","es":"gallina","emoji":"🐔","level":"basico"},{"en":"duck","es":"pato","emoji":"🦆","level":"basico"},{"en":"rabbit","es":"conejo","emoji":"🐰","level":"basico"},{"en":"mouse","es":"raton","emoji":"🐭","level":"basico"},{"en":"lion","es":"león","emoji":"🦁","level":"basico"},{"en":"tiger","es":"tigre","emoji":"🐯","level":"basico"},{"en":"elephant","es":"elefante","emoji":"🐘","level":"basico"},{"en":"monkey","es":"mono","emoji":"🐵","level":"basico"},{"en":"bear","es":"oso","emoji":"🐻","level":"basico"},{"en":"snake","es":"serpiente","emoji":"🐍","level":"basico"},{"en":"frog","es":"rana","emoji":"🐸","level":"basico"},{"en":"turtle","es":"tortuga","emoji":"🐢","level":"basico"},{"en":"butterfly","es":"mariposa","emoji":"🦋","level":"basico"},{"en":"bee","es":"abeja","emoji":"🐝","level":"basico"},{"en":"spider","es":"araña","emoji":"🕷️","level":"basico"},{"en":"fox","es":"zorro","emoji":"🦊","level":"basico"},{"en":"wolf","es":"lobo","emoji":"🐺","level":"basico"},{"en":"deer","es":"venado","emoji":"🦌","level":"basico"},{"en":"owl","es":"búho","emoji":"🦉","level":"basico"},{"en":"penguin","es":"pingüino","emoji":"🐧","level":"basico"},{"en":"whale","es":"ballena","emoji":"🐳","level":"basico"},{"en":"shark","es":"tiburón","emoji":"🦈","level":"basico"},{"en":"crab","es":"cangrejo","emoji":"🦀","level":"basico"},{"en":"goat","es":"cabra","emoji":"🐐","level":"basico"},{"en":"ant","es":"hormiga","emoji":"🐜","level":"basico"},{"en":"apple","es":"manzana","emoji":"🍎","level":"basico"},{"en":"banana","es":"platano","emoji":"🍌","level":"basico"},{"en":"grape","es":"uva","emoji":"🍇","level":"basico"},{"en":"lemon","es":"limon","emoji":"🍋","level":"basico"},{"en":"watermelon","es":"sandia","emoji":"🍉","level":"basico"},{"en":"strawberry","es":"fresa","emoji":"🍓","level":"basico"},{"en":"pineapple","es":"piña","emoji":"🍍","level":"basico"},{"en":"mango","es":"mango","emoji":"🥭","level":"intermedio"},{"en":"peach","es":"durazno","emoji":"🍑","level":"intermedio"},{"en":"cherry","es":"cereza","emoji":"🍒","level":"intermedio"},{"en":"avocado","es":"aguacate","emoji":"🥑","level":"intermedio"},{"en":"tomato","es":"tomate","emoji":"🍅","level":"basico"},{"en":"potato","es":"papa","emoji":"🥔","level":"basico"},{"en":"carrot","es":"zanahoria","emoji":"🥕","level":"basico"},{"en":"onion","es":"cebolla","emoji":"🧅","level":"basico"},{"en":"garlic","es":"ajo","emoji":"🧄","level":"intermedio"},{"en":"corn","es":"maiz","emoji":"🌽","level":"basico"},{"en":"broccoli","es":"brocoli","emoji":"🥦","level":"intermedio"},{"en":"cucumber","es":"pepino","emoji":"🥒","level":"intermedio"},{"en":"pepper","es":"pimiento","emoji":"🌶️","level":"basico"},{"en":"bread","es":"pan","emoji":"🍞","level":"basico"},{"en":"cheese","es":"queso","emoji":"🧀","level":"basico"},{"en":"egg","es":"huevo","emoji":"🥚","level":"basico"},{"en":"butter","es":"mantequilla","emoji":"🧈","level":"basico"},{"en":"milk","es":"leche","emoji":"🥛","level":"basico"},{"en":"rice","es":"arroz","emoji":"🍚","level":"basico"},{"en":"meat","es":"carne","emoji":"🍖","level":"basico"},{"en":"beef","es":"res","emoji":"","level":"intermedio"},{"en":"soup","es":"sopa","emoji":"🍲","level":"basico"},{"en":"salad","es":"ensalada","emoji":"🥗","level":"basico"},{"en":"pizza","es":"pizza","emoji":"🍕","level":"basico"},{"en":"hamburger","es":"hamburguesa","emoji":"🍔","level":"basico"},{"en":"sandwich","es":"sándwich","emoji":"🥪","level":"basico"},{"en":"pasta","es":"pasta","emoji":"🍝","level":"basico"},{"en":"cake","es":"pastel","emoji":"🎂","level":"basico"},{"en":"cookie","es":"galleta","emoji":"🍪","level":"basico"},{"en":"chocolate","es":"chocolate","emoji":"🍫","level":"basico"},{"en":"ice cream","es":"helado","emoji":"🍦","level":"basico"},{"en":"honey","es":"miel","emoji":"🍯","level":"intermedio"},{"en":"sugar","es":"azucar","emoji":"","level":"basico"},{"en":"salt","es":"sal","emoji":"","level":"basico"},{"en":"coffee","es":"cafe","emoji":"☕","level":"basico"},{"en":"tea","es":"te","emoji":"🍵","level":"basico"},{"en":"juice","es":"jugo","emoji":"🧃","level":"basico"},{"en":"water","es":"agua","emoji":"💧","level":"basico"},{"en":"wine","es":"vino","emoji":"🍷","level":"intermedio"},{"en":"beer","es":"cerveza","emoji":"🍺","level":"intermedio"},{"en":"house","es":"casa","emoji":"🏠","level":"basico"},{"en":"door","es":"puerta","emoji":"🚪","level":"basico"},{"en":"window","es":"ventana","emoji":"🪟","level":"basico"},{"en":"bed","es":"cama","emoji":"🛏️","level":"basico"},{"en":"chair","es":"silla","emoji":"🪑","level":"basico"},{"en":"table","es":"mesa","emoji":"","level":"basico"},{"en":"sofa","es":"sofa","emoji":"🛋️","level":"basico"},{"en":"kitchen","es":"cocina","emoji":"","level":"basico"},{"en":"bathroom","es":"baño","emoji":"🚽","level":"basico"},{"en":"shower","es":"ducha","emoji":"🚿","level":"basico"},{"en":"bathtub","es":"bañera","emoji":"🛁","level":"intermedio"},{"en":"mirror","es":"espejo","emoji":"","level":"basico"},{"en":"lamp","es":"lámpara","emoji":"","level":"basico"},{"en":"key","es":"llave","emoji":"🔑","level":"basico"},{"en":"clock","es":"reloj","emoji":"🕐","level":"basico"},{"en":"shirt","es":"camisa","emoji":"👕","level":"basico"},{"en":"pants","es":"pantalón","emoji":"","level":"basico"},{"en":"dress","es":"vestido","emoji":"👗","level":"basico"},{"en":"skirt","es":"falda","emoji":"","level":"basico"},{"en":"shoe","es":"zapato","emoji":"👞","level":"basico"},{"en":"sock","es":"calcetin","emoji":"🧦","level":"basico"},{"en":"hat","es":"sombrero","emoji":"👒","level":"basico"},{"en":"jacket","es":"chaqueta","emoji":"🧥","level":"basico"},{"en":"coat","es":"abrigo","emoji":"","level":"basico"},{"en":"glove","es":"guante","emoji":"🧤","level":"intermedio"},{"en":"scarf","es":"bufanda","emoji":"🧣","level":"intermedio"},{"en":"belt","es":"cinturón","emoji":"","level":"basico"},{"en":"tie","es":"corbata","emoji":"","level":"basico"},{"en":"sunglasses","es":"gafas de sol","emoji":"🕶️","level":"intermedio"},{"en":"watch","es":"reloj de pulsera","emoji":"⌚","level":"basico"},{"en":"ring","es":"anillo","emoji":"💍","level":"basico"},{"en":"umbrella","es":"paraguas","emoji":"☂️","level":"basico"},{"en":"bag","es":"bolso","emoji":"👜","level":"basico"},{"en":"sun","es":"sol","emoji":"☀️","level":"basico"},{"en":"moon","es":"luna","emoji":"🌙","level":"basico"},{"en":"star","es":"estrella","emoji":"⭐","level":"basico"},{"en":"sky","es":"cielo","emoji":"","level":"basico"},{"en":"cloud","es":"nube","emoji":"☁️","level":"basico"},{"en":"rain","es":"lluvia","emoji":"🌧️","level":"basico"},{"en":"snow","es":"nieve","emoji":"❄️","level":"basico"},{"en":"wind","es":"viento","emoji":"💨","level":"basico"},{"en":"rainbow","es":"arcoíris","emoji":"🌈","level":"basico"},{"en":"tree","es":"arbol","emoji":"🌳","level":"basico"},{"en":"flower","es":"flor","emoji":"🌸","level":"basico"},{"en":"leaf","es":"hoja","emoji":"🍂","level":"basico"},{"en":"mountain","es":"montaña","emoji":"⛰️","level":"basico"},{"en":"river","es":"río","emoji":"","level":"basico"},{"en":"lake","es":"lago","emoji":"","level":"basico"},{"en":"sea","es":"mar","emoji":"🌊","level":"basico"},{"en":"beach","es":"playa","emoji":"🏖️","level":"basico"},{"en":"forest","es":"bosque","emoji":"🌲","level":"basico"},{"en":"car","es":"carro","emoji":"🚗","level":"basico"},{"en":"bus","es":"autobus","emoji":"🚌","level":"basico"},{"en":"train","es":"tren","emoji":"🚆","level":"basico"},{"en":"airplane","es":"avión","emoji":"✈️","level":"basico"},{"en":"boat","es":"barco","emoji":"⛵","level":"basico"},{"en":"bicycle","es":"bicicleta","emoji":"🚲","level":"basico"},{"en":"motorcycle","es":"motocicleta","emoji":"🏍️","level":"basico"},{"en":"truck","es":"camión","emoji":"🚚","level":"basico"},{"en":"taxi","es":"taxi","emoji":"🚕","level":"basico"},{"en":"ship","es":"buque","emoji":"🚢","level":"intermedio"},{"en":"book","es":"libro","emoji":"📚","level":"basico"},{"en":"pen","es":"bolígrafo","emoji":"🖊️","level":"basico"},{"en":"pencil","es":"lápiz","emoji":"✏️","level":"basico"},{"en":"notebook","es":"cuaderno","emoji":"📓","level":"basico"},{"en":"backpack","es":"mochila","emoji":"🎒","level":"basico"},{"en":"scissors","es":"tijeras","emoji":"✂️","level":"basico"},{"en":"computer","es":"computadora","emoji":"💻","level":"basico"},{"en":"phone","es":"teléfono","emoji":"📱","level":"basico"},{"en":"letter","es":"carta","emoji":"✉️","level":"basico"},{"en":"map","es":"mapa","emoji":"🗺️","level":"basico"},{"en":"picture","es":"foto","emoji":"","level":"basico"},{"en":"calendar","es":"calendario","emoji":"📅","level":"basico"},{"en":"ball","es":"pelota","emoji":"⚽","level":"basico"},{"en":"soccer","es":"fútbol","emoji":"⚽","level":"basico"},{"en":"basketball","es":"baloncesto","emoji":"🏀","level":"basico"},{"en":"tennis","es":"tenis","emoji":"🎾","level":"basico"},{"en":"baseball","es":"béisbol","emoji":"⚾","level":"basico"},{"en":"today","es":"hoy","emoji":"","level":"basico"},{"en":"tomorrow","es":"mañana","emoji":"","level":"basico"},{"en":"yesterday","es":"ayer","emoji":"","level":"basico"},{"en":"week","es":"semana","emoji":"","level":"basico"},{"en":"month","es":"mes","emoji":"","level":"basico"},{"en":"year","es":"año","emoji":"","level":"basico"},{"en":"morning","es":"mañana","emoji":"","level":"basico"},{"en":"afternoon","es":"tarde","emoji":"","level":"basico"},{"en":"night","es":"noche","emoji":"","level":"basico"},{"en":"hour","es":"hora","emoji":"","level":"basico"},{"en":"minute","es":"minuto","emoji":"","level":"basico"},{"en":"second","es":"segundo","emoji":"","level":"basico"},{"en":"monday","es":"lunes","emoji":"","level":"basico"},{"en":"tuesday","es":"martes","emoji":"","level":"basico"},{"en":"wednesday","es":"miercoles","emoji":"","level":"basico"},{"en":"thursday","es":"jueves","emoji":"","level":"basico"},{"en":"friday","es":"viernes","emoji":"","level":"basico"},{"en":"saturday","es":"sabado","emoji":"","level":"basico"},{"en":"sunday","es":"domingo","emoji":"","level":"basico"},{"en":"january","es":"enero","emoji":"","level":"basico"},{"en":"february","es":"febrero","emoji":"","level":"basico"},{"en":"march","es":"marzo","emoji":"","level":"basico"},{"en":"april","es":"abril","emoji":"","level":"basico"},{"en":"may","es":"mayo","emoji":"","level":"basico"},{"en":"june","es":"junio","emoji":"","level":"basico"},{"en":"july","es":"julio","emoji":"","level":"basico"},{"en":"august","es":"agosto","emoji":"","level":"basico"},{"en":"september","es":"septiembre","emoji":"","level":"basico"},{"en":"october","es":"octubre","emoji":"","level":"basico"},{"en":"november","es":"noviembre","emoji":"","level":"basico"},{"en":"december","es":"diciembre","emoji":"","level":"basico"},{"en":"money","es":"dinero","emoji":"","level":"intermedio"},{"en":"work","es":"trabajo","emoji":"","level":"basico"},{"en":"job","es":"empleo","emoji":"","level":"intermedio"},{"en":"friend","es":"amigo","emoji":"","level":"basico"},{"en":"love","es":"amor","emoji":"","level":"basico"},{"en":"life","es":"vida","emoji":"","level":"intermedio"},{"en":"world","es":"mundo","emoji":"","level":"intermedio"},{"en":"country","es":"país","emoji":"","level":"intermedio"},{"en":"city","es":"ciudad","emoji":"","level":"basico"},{"en":"street","es":"calle","emoji":"","level":"basico"},{"en":"school","es":"escuela","emoji":"","level":"basico"},{"en":"hospital","es":"hospital","emoji":"","level":"basico"},{"en":"store","es":"tienda","emoji":"","level":"basico"},{"en":"market","es":"mercado","emoji":"","level":"basico"},{"en":"office","es":"oficina","emoji":"","level":"intermedio"},{"en":"game","es":"juego","emoji":"","level":"basico"},{"en":"music","es":"música","emoji":"","level":"basico"},{"en":"movie","es":"película","emoji":"","level":"basico"},{"en":"party","es":"fiesta","emoji":"","level":"basico"},{"en":"gift","es":"regalo","emoji":"","level":"basico"},{"en":"problem","es":"problema","emoji":"","level":"intermedio"},{"en":"answer","es":"respuesta","emoji":"","level":"intermedio"},{"en":"question","es":"pregunta","emoji":"","level":"basico"},{"en":"idea","es":"idea","emoji":"","level":"intermedio"},{"en":"plan","es":"plan","emoji":"","level":"intermedio"},{"en":"news","es":"noticias","emoji":"","level":"intermedio"},{"en":"story","es":"historia","emoji":"","level":"intermedio"},{"en":"name","es":"nombre","emoji":"","level":"basico"},{"en":"language","es":"idioma","emoji":"","level":"intermedio"},{"en":"word","es":"palabra","emoji":"","level":"basico"},{"en":"sentence","es":"oración","emoji":"","level":"intermedio"},{"en":"number","es":"número","emoji":"","level":"basico"},{"en":"size","es":"tamaño","emoji":"","level":"intermedio"},{"en":"shape","es":"forma","emoji":"","level":"intermedio"},{"en":"price","es":"precio","emoji":"","level":"intermedio"},{"en":"list","es":"lista","emoji":"","level":"intermedio"},{"en":"be","es":"ser o estar","emoji":"","level":"basico"},{"en":"have","es":"tener","emoji":"","level":"basico"},{"en":"do","es":"hacer","emoji":"","level":"basico"},{"en":"go","es":"ir","emoji":"","level":"basico"},{"en":"come","es":"venir","emoji":"","level":"basico"},{"en":"see","es":"ver","emoji":"","level":"basico"},{"en":"know","es":"saber","emoji":"","level":"basico"},{"en":"get","es":"obtener","emoji":"","level":"basico"},{"en":"make","es":"hacer","emoji":"","level":"basico"},{"en":"think","es":"pensar","emoji":"","level":"basico"},{"en":"take","es":"tomar","emoji":"","level":"basico"},{"en":"give","es":"dar","emoji":"","level":"basico"},{"en":"find","es":"encontrar","emoji":"","level":"basico"},{"en":"tell","es":"decir","emoji":"","level":"basico"},{"en":"ask","es":"preguntar","emoji":"","level":"basico"},{"en":"study","es":"estudiar","emoji":"","level":"basico"},{"en":"learn","es":"aprender","emoji":"","level":"basico"},{"en":"read","es":"leer","emoji":"","level":"basico"},{"en":"write","es":"escribir","emoji":"","level":"basico"},{"en":"speak","es":"hablar","emoji":"","level":"basico"},{"en":"listen","es":"escuchar","emoji":"","level":"basico"},{"en":"eat","es":"comer","emoji":"","level":"basico"},{"en":"drink","es":"beber","emoji":"","level":"basico"},{"en":"sleep","es":"dormir","emoji":"","level":"basico"},{"en":"walk","es":"caminar","emoji":"","level":"basico"},{"en":"run","es":"correr","emoji":"","level":"basico"},{"en":"swim","es":"nadar","emoji":"","level":"basico"},{"en":"play","es":"jugar","emoji":"","level":"basico"},{"en":"smell","es":"oler","emoji":"","level":"intermedio"},{"en":"buy","es":"comprar","emoji":"","level":"basico"},{"en":"sell","es":"vender","emoji":"","level":"intermedio"},{"en":"pay","es":"pagar","emoji":"","level":"basico"},{"en":"open","es":"abrir","emoji":"","level":"basico"},{"en":"close","es":"cerrar","emoji":"","level":"basico"},{"en":"start","es":"empezar","emoji":"","level":"basico"},{"en":"stop","es":"parar","emoji":"","level":"basico"},{"en":"help","es":"ayudar","emoji":"","level":"basico"},{"en":"need","es":"necesitar","emoji":"","level":"basico"},{"en":"want","es":"querer","emoji":"","level":"basico"},{"en":"like","es":"gustar","emoji":"","level":"basico"},{"en":"enjoy","es":"disfrutar","emoji":"","level":"intermedio"},{"en":"live","es":"vivir","emoji":"","level":"basico"},{"en":"travel","es":"viajar","emoji":"","level":"intermedio"},{"en":"drive","es":"manejar","emoji":"","level":"basico"},{"en":"fly","es":"volar","emoji":"","level":"intermedio"},{"en":"wait","es":"esperar","emoji":"","level":"basico"},{"en":"call","es":"llamar","emoji":"","level":"basico"},{"en":"send","es":"enviar","emoji":"","level":"intermedio"},{"en":"receive","es":"recibir","emoji":"","level":"intermedio"},{"en":"bring","es":"traer","emoji":"","level":"intermedio"},{"en":"carry","es":"cargar","emoji":"","level":"intermedio"},{"en":"build","es":"construir","emoji":"","level":"intermedio"},{"en":"break","es":"romper","emoji":"","level":"intermedio"},{"en":"fix","es":"reparar","emoji":"","level":"intermedio"},{"en":"clean","es":"limpiar","emoji":"","level":"basico"},{"en":"cook","es":"cocinar","emoji":"","level":"basico"},{"en":"wash","es":"lavar","emoji":"","level":"basico"},{"en":"teach","es":"ensenar","emoji":"","level":"intermedio"},{"en":"remember","es":"recordar","emoji":"","level":"intermedio"},{"en":"forget","es":"olvidar","emoji":"","level":"intermedio"},{"en":"understand","es":"entender","emoji":"","level":"intermedio"},{"en":"believe","es":"creer","emoji":"","level":"intermedio"},{"en":"feel","es":"sentir","emoji":"","level":"intermedio"},{"en":"smile","es":"sonreir","emoji":"","level":"intermedio"},{"en":"laugh","es":"reir","emoji":"","level":"intermedio"},{"en":"cry","es":"llorar","emoji":"","level":"intermedio"},{"en":"sing","es":"cantar","emoji":"","level":"basico"},{"en":"dance","es":"bailar","emoji":"","level":"basico"},{"en":"paint","es":"pintar","emoji":"","level":"intermedio"},{"en":"draw","es":"dibujar","emoji":"","level":"intermedio"},{"en":"jump","es":"saltar","emoji":"","level":"basico"},{"en":"climb","es":"escalar","emoji":"","level":"intermedio"},{"en":"push","es":"empujar","emoji":"","level":"intermedio"},{"en":"pull","es":"jalar","emoji":"","level":"intermedio"},{"en":"throw","es":"lanzar","emoji":"","level":"intermedio"},{"en":"catch","es":"atrapar","emoji":"","level":"intermedio"},{"en":"hold","es":"sostener","emoji":"","level":"intermedio"},{"en":"touch","es":"tocar","emoji":"","level":"basico"},{"en":"kick","es":"patear","emoji":"","level":"intermedio"},{"en":"cut","es":"cortar","emoji":"","level":"basico"},{"en":"big","es":"grande","emoji":"📏","level":"basico"},{"en":"small","es":"pequeno","emoji":"","level":"basico"},{"en":"tall","es":"alto","emoji":"","level":"basico"},{"en":"short","es":"bajo","emoji":"","level":"basico"},{"en":"long","es":"largo","emoji":"","level":"basico"},{"en":"new","es":"nuevo","emoji":"","level":"basico"},{"en":"old","es":"viejo","emoji":"","level":"basico"},{"en":"young","es":"joven","emoji":"","level":"basico"},{"en":"good","es":"bueno","emoji":"","level":"basico"},{"en":"bad","es":"malo","emoji":"","level":"basico"},{"en":"happy","es":"feliz","emoji":"😊","level":"basico"},{"en":"sad","es":"triste","emoji":"😢","level":"basico"},{"en":"angry","es":"enojado","emoji":"😠","level":"basico"},{"en":"tired","es":"cansado","emoji":"😴","level":"intermedio"},{"en":"hungry","es":"hambriento","emoji":"","level":"basico"},{"en":"thirsty","es":"sediento","emoji":"","level":"intermedio"},{"en":"hot","es":"caliente","emoji":"","level":"basico"},{"en":"cold","es":"frio","emoji":"","level":"basico"},{"en":"warm","es":"calido","emoji":"","level":"intermedio"},{"en":"cool","es":"fresco","emoji":"","level":"intermedio"},{"en":"easy","es":"fácil","emoji":"","level":"basico"},{"en":"difficult","es":"difícil","emoji":"","level":"basico"},{"en":"fast","es":"rápido","emoji":"","level":"basico"},{"en":"slow","es":"lento","emoji":"","level":"basico"},{"en":"strong","es":"fuerte","emoji":"","level":"basico"},{"en":"weak","es":"débil","emoji":"","level":"intermedio"},{"en":"heavy","es":"pesado","emoji":"","level":"basico"},{"en":"light","es":"ligero","emoji":"","level":"basico"},{"en":"dirty","es":"sucio","emoji":"","level":"basico"},{"en":"beautiful","es":"hermoso","emoji":"","level":"basico"},{"en":"ugly","es":"feo","emoji":"","level":"basico"},{"en":"rich","es":"rico","emoji":"","level":"basico"},{"en":"poor","es":"pobre","emoji":"","level":"intermedio"},{"en":"smart","es":"inteligente","emoji":"","level":"basico"},{"en":"funny","es":"gracioso","emoji":"","level":"basico"},{"en":"boring","es":"aburrido","emoji":"","level":"basico"},{"en":"interesting","es":"interesante","emoji":"","level":"intermedio"},{"en":"important","es":"importante","emoji":"","level":"intermedio"},{"en":"expensive","es":"caro","emoji":"","level":"intermedio"},{"en":"cheap","es":"barato","emoji":"","level":"intermedio"},{"en":"full","es":"lleno","emoji":"","level":"basico"},{"en":"empty","es":"vacío","emoji":"","level":"intermedio"},{"en":"loud","es":"ruidoso","emoji":"","level":"intermedio"},{"en":"quiet","es":"silencioso","emoji":"","level":"intermedio"},{"en":"soft","es":"suave","emoji":"","level":"intermedio"},{"en":"hard","es":"duro","emoji":"","level":"basico"},{"en":"sweet","es":"dulce","emoji":"","level":"basico"},{"en":"sour","es":"agrio","emoji":"","level":"intermedio"},{"en":"early","es":"temprano","emoji":"","level":"basico"},{"en":"late","es":"tarde","emoji":"","level":"basico"},{"en":"dangerous","es":"peligroso","emoji":"","level":"intermedio"},{"en":"safe","es":"seguro","emoji":"","level":"intermedio"},{"en":"wet","es":"mojado","emoji":"","level":"intermedio"},{"en":"dry","es":"seco","emoji":"","level":"intermedio"},{"en":"clear","es":"claro","emoji":"","level":"intermedio"},{"en":"dark","es":"oscuro","emoji":"","level":"basico"},{"en":"bright","es":"brillante","emoji":"","level":"intermedio"},{"en":"calm","es":"tranquilo","emoji":"","level":"intermedio"},{"en":"brave","es":"valiente","emoji":"","level":"intermedio"},{"en":"in","es":"en","emoji":"","level":"basico"},{"en":"on","es":"sobre","emoji":"","level":"basico"},{"en":"under","es":"debajo","emoji":"","level":"basico"},{"en":"over","es":"encima","emoji":"","level":"intermedio"},{"en":"near","es":"cerca","emoji":"","level":"basico"},{"en":"far","es":"lejos","emoji":"","level":"basico"},{"en":"with","es":"con","emoji":"","level":"basico"},{"en":"without","es":"sin","emoji":"","level":"basico"},{"en":"before","es":"antes","emoji":"","level":"basico"},{"en":"after","es":"despues","emoji":"","level":"basico"},{"en":"between","es":"entre","emoji":"","level":"intermedio"},{"en":"what","es":"qué","emoji":"","level":"basico"},{"en":"who","es":"quién","emoji":"","level":"basico"},{"en":"where","es":"dónde","emoji":"","level":"basico"},{"en":"when","es":"cuándo","emoji":"","level":"basico"},{"en":"why","es":"por qué","emoji":"","level":"basico"},{"en":"how","es":"cómo","emoji":"","level":"basico"},{"en":"yes","es":"sí","emoji":"","level":"basico"},{"en":"no","es":"no","emoji":"","level":"basico"},{"en":"maybe","es":"quizas","emoji":"","level":"basico"},{"en":"always","es":"siempre","emoji":"","level":"basico"},{"en":"never","es":"nunca","emoji":"","level":"basico"},{"en":"sometimes","es":"a veces","emoji":"","level":"basico"},{"en":"now","es":"ahora","emoji":"","level":"basico"},{"en":"later","es":"luego","emoji":"","level":"basico"},{"en":"here","es":"aquí","emoji":"","level":"basico"},{"en":"there","es":"allí","emoji":"","level":"basico"},{"en":"doctor","es":"doctor","emoji":"👨‍⚕️","level":"basico"},{"en":"teacher","es":"maestro","emoji":"👩‍🏫","level":"basico"},{"en":"engineer","es":"ingeniero","emoji":"","level":"intermedio"},{"en":"lawyer","es":"abogado","emoji":"","level":"intermedio"},{"en":"nurse","es":"enfermero","emoji":"👩‍⚕️","level":"intermedio"},{"en":"police officer","es":"policía","emoji":"👮","level":"basico"},{"en":"firefighter","es":"bombero","emoji":"👨‍🚒","level":"basico"},{"en":"chef","es":"cocinero","emoji":"👨‍🍳","level":"intermedio"},{"en":"farmer","es":"granjero","emoji":"👨‍🌾","level":"intermedio"},{"en":"artist","es":"artista","emoji":"👨‍🎨","level":"intermedio"},{"en":"singer","es":"cantante","emoji":"","level":"intermedio"},{"en":"driver","es":"conductor","emoji":"🚗","level":"intermedio"},{"en":"pilot","es":"piloto","emoji":"✈️","level":"intermedio"},{"en":"student","es":"estudiante","emoji":"🎓","level":"basico"},{"en":"waiter","es":"mesero","emoji":"","level":"intermedio"},{"en":"airport","es":"aeropuerto","emoji":"✈️","level":"basico"},{"en":"restaurant","es":"restaurante","emoji":"🍽️","level":"basico"},{"en":"bank","es":"banco","emoji":"🏦","level":"basico"},{"en":"church","es":"iglesia","emoji":"⛪","level":"intermedio"},{"en":"park","es":"parque","emoji":"🏞️","level":"basico"},{"en":"library","es":"biblioteca","emoji":"📖","level":"basico"},{"en":"museum","es":"museo","emoji":"🏛️","level":"intermedio"},{"en":"hotel","es":"hotel","emoji":"🏨","level":"basico"},{"en":"farm","es":"granja","emoji":"","level":"intermedio"},{"en":"factory","es":"fábrica","emoji":"🏭","level":"intermedio"},{"en":"stadium","es":"estadio","emoji":"🏟️","level":"intermedio"},{"en":"zoo","es":"zoologico","emoji":"","level":"basico"},{"en":"gym","es":"gimnasio","emoji":"🏋️","level":"intermedio"},{"en":"pharmacy","es":"farmacia","emoji":"💊","level":"intermedio"},{"en":"supermarket","es":"supermercado","emoji":"🛒","level":"basico"},{"en":"glasses","es":"gafas","emoji":"👓","level":"basico"},{"en":"suitcase","es":"maleta","emoji":"🧳","level":"intermedio"},{"en":"camera","es":"cámara","emoji":"📷","level":"basico"},{"en":"television","es":"televisión","emoji":"📺","level":"basico"},{"en":"radio","es":"radio","emoji":"📻","level":"intermedio"},{"en":"candle","es":"vela","emoji":"🕯️","level":"intermedio"},{"en":"box","es":"caja","emoji":"📦","level":"basico"},{"en":"bottle","es":"botella","emoji":"🍾","level":"basico"},{"en":"cup","es":"taza","emoji":"☕","level":"basico"},{"en":"plate","es":"plato","emoji":"🍽️","level":"basico"},{"en":"fork","es":"tenedor","emoji":"🍴","level":"basico"},{"en":"knife","es":"cuchillo","emoji":"🔪","level":"basico"},{"en":"spoon","es":"cuchara","emoji":"🥄","level":"basico"},{"en":"toy","es":"juguete","emoji":"🧸","level":"basico"},{"en":"pillow","es":"almohada","emoji":"🛏️","level":"intermedio"},{"en":"blanket","es":"manta","emoji":"","level":"intermedio"},{"en":"deadline","es":"fecha límite","emoji":"⏰","level":"avanzado","alt":[]},{"en":"budget","es":"presupuesto","emoji":"💰","level":"avanzado","alt":[]},{"en":"meeting","es":"reunión","emoji":"🗓️","level":"avanzado","alt":[]},{"en":"goal","es":"meta","emoji":"🎯","level":"avanzado","alt":[]},{"en":"teamwork","es":"trabajo en equipo","emoji":"🤝","level":"avanzado","alt":[]},{"en":"negotiation","es":"negociación","emoji":"🤝","level":"avanzado","alt":[]},{"en":"leadership","es":"liderazgo","emoji":"👑","level":"avanzado","alt":[]},{"en":"strategy","es":"estrategia","emoji":"♟️","level":"avanzado","alt":[]},{"en":"achievement","es":"logro","emoji":"🏆","level":"avanzado","alt":[]},{"en":"milestone","es":"hito","emoji":"🚩","level":"avanzado","alt":[]},{"en":"network","es":"red","emoji":"🕸️","level":"avanzado","alt":[]},{"en":"opportunity","es":"oportunidad","emoji":"🚪","level":"avanzado","alt":[]},{"en":"challenge","es":"desafío","emoji":"🧗","level":"avanzado","alt":[]},{"en":"solution","es":"solución","emoji":"💡","level":"avanzado","alt":[]},{"en":"growth","es":"crecimiento","emoji":"📈","level":"avanzado","alt":[]},{"en":"innovation","es":"innovación","emoji":"💡","level":"avanzado","alt":[]},{"en":"risk","es":"riesgo","emoji":"⚠️","level":"avanzado","alt":[]},{"en":"conflict","es":"conflicto","emoji":"⚔️","level":"avanzado","alt":[]},{"en":"compromise","es":"acuerdo","emoji":"🤝","level":"avanzado","alt":[]},{"en":"feedback","es":"retroalimentación","emoji":"🔁","level":"avanzado","alt":[]},{"en":"presentation","es":"presentación","emoji":"📊","level":"avanzado","alt":[]},{"en":"contract","es":"contrato","emoji":"📄","level":"avanzado","alt":[]},{"en":"investment","es":"inversión","emoji":"💹","level":"avanzado","alt":[]},{"en":"partnership","es":"sociedad","emoji":"🤝","level":"avanzado","alt":[]},{"en":"promotion","es":"ascenso","emoji":"⬆️","level":"avanzado","alt":[]},{"en":"resignation","es":"renuncia","emoji":"📤","level":"avanzado","alt":[]},{"en":"interview","es":"entrevista","emoji":"🎙️","level":"avanzado","alt":[]},{"en":"resume","es":"currículum","emoji":"📄","level":"avanzado","alt":[]},{"en":"salary","es":"salario","emoji":"💵","level":"avanzado","alt":[]},{"en":"workload","es":"carga de trabajo","emoji":"📚","level":"avanzado","alt":[]},{"en":"achieve","es":"lograr","emoji":"","level":"avanzado","alt":[]},{"en":"analyze","es":"analizar","emoji":"","level":"avanzado","alt":[]},{"en":"negotiate","es":"negociar","emoji":"","level":"avanzado","alt":[]},{"en":"implement","es":"implementar","emoji":"","level":"avanzado","alt":[]},{"en":"evaluate","es":"evaluar","emoji":"","level":"avanzado","alt":[]},{"en":"justify","es":"justificar","emoji":"","level":"avanzado","alt":[]},{"en":"acknowledge","es":"reconocer","emoji":"","level":"avanzado","alt":[]},{"en":"emphasize","es":"enfatizar","emoji":"","level":"avanzado","alt":[]},{"en":"overcome","es":"superar","emoji":"","level":"avanzado","alt":[]},{"en":"anticipate","es":"anticipar","emoji":"","level":"avanzado","alt":[]},{"en":"collaborate","es":"colaborar","emoji":"","level":"avanzado","alt":[]},{"en":"contribute","es":"contribuir","emoji":"","level":"avanzado","alt":[]},{"en":"demonstrate","es":"demostrar","emoji":"","level":"avanzado","alt":[]},{"en":"enhance","es":"mejorar","emoji":"","level":"avanzado","alt":[]},{"en":"establish","es":"establecer","emoji":"","level":"avanzado","alt":[]},{"en":"facilitate","es":"facilitar","emoji":"","level":"avanzado","alt":[]},{"en":"generate","es":"generar","emoji":"","level":"avanzado","alt":[]},{"en":"illustrate","es":"ilustrar","emoji":"","level":"avanzado","alt":[]},{"en":"interpret","es":"interpretar","emoji":"","level":"avanzado","alt":[]},{"en":"maintain","es":"mantener","emoji":"","level":"avanzado","alt":[]},{"en":"obtain","es":"obtener","emoji":"","level":"avanzado","alt":[]},{"en":"participate","es":"participar","emoji":"","level":"avanzado","alt":[]},{"en":"perceive","es":"percibir","emoji":"","level":"avanzado","alt":[]},{"en":"pursue","es":"perseguir","emoji":"","level":"avanzado","alt":[]},{"en":"recognize","es":"reconocer","emoji":"","level":"avanzado","alt":[]},{"en":"reflect","es":"reflexionar","emoji":"","level":"avanzado","alt":[]},{"en":"resolve","es":"resolver","emoji":"","level":"avanzado","alt":[]},{"en":"sustain","es":"sostener","emoji":"","level":"avanzado","alt":[]},{"en":"transform","es":"transformar","emoji":"","level":"avanzado","alt":[]},{"en":"accomplish","es":"lograr","emoji":"","level":"avanzado","alt":[]},{"en":"address","es":"abordar","emoji":"","level":"avanzado","alt":[]},{"en":"allocate","es":"asignar","emoji":"","level":"avanzado","alt":[]},{"en":"assess","es":"evaluar","emoji":"","level":"avanzado","alt":[]},{"en":"assume","es":"asumir","emoji":"","level":"avanzado","alt":[]},{"en":"clarify","es":"aclarar","emoji":"","level":"avanzado","alt":[]},{"en":"commit","es":"comprometerse","emoji":"","level":"avanzado","alt":[]},{"en":"confront","es":"confrontar","emoji":"","level":"avanzado","alt":[]},{"en":"consult","es":"consultar","emoji":"","level":"avanzado","alt":[]},{"en":"deduce","es":"deducir","emoji":"","level":"avanzado","alt":[]},{"en":"delegate","es":"delegar","emoji":"","level":"avanzado","alt":[]},{"en":"ambiguous","es":"ambiguo","emoji":"","level":"avanzado","alt":[]},{"en":"arbitrary","es":"arbitrario","emoji":"","level":"avanzado","alt":[]},{"en":"coherent","es":"coherente","emoji":"","level":"avanzado","alt":[]},{"en":"comprehensive","es":"exhaustivo","emoji":"","level":"avanzado","alt":[]},{"en":"controversial","es":"controvertido","emoji":"","level":"avanzado","alt":[]},{"en":"crucial","es":"crucial","emoji":"","level":"avanzado","alt":[]},{"en":"decisive","es":"decisivo","emoji":"","level":"avanzado","alt":[]},{"en":"distinct","es":"distinto","emoji":"","level":"avanzado","alt":[]},{"en":"elaborate","es":"elaborado","emoji":"","level":"avanzado","alt":[]},{"en":"essential","es":"esencial","emoji":"","level":"avanzado","alt":[]},{"en":"feasible","es":"factible","emoji":"","level":"avanzado","alt":[]},{"en":"inevitable","es":"inevitable","emoji":"","level":"avanzado","alt":[]},{"en":"inherent","es":"inherente","emoji":"","level":"avanzado","alt":[]},{"en":"integral","es":"integral","emoji":"","level":"avanzado","alt":[]},{"en":"legitimate","es":"legítimo","emoji":"","level":"avanzado","alt":[]},{"en":"notable","es":"notable","emoji":"","level":"avanzado","alt":[]},{"en":"notorious","es":"notorio","emoji":"","level":"avanzado","alt":[]},{"en":"overwhelming","es":"abrumador","emoji":"","level":"avanzado","alt":[]},{"en":"plausible","es":"plausible","emoji":"","level":"avanzado","alt":[]},{"en":"prevalent","es":"generalizado","emoji":"","level":"avanzado","alt":[]},{"en":"profound","es":"profundo","emoji":"","level":"avanzado","alt":[]},{"en":"rigorous","es":"riguroso","emoji":"","level":"avanzado","alt":[]},{"en":"subtle","es":"sutil","emoji":"","level":"avanzado","alt":[]},{"en":"substantial","es":"sustancial","emoji":"","level":"avanzado","alt":[]},{"en":"sufficient","es":"suficiente","emoji":"","level":"avanzado","alt":[]},{"en":"tentative","es":"provisional","emoji":"","level":"avanzado","alt":[]},{"en":"thorough","es":"minucioso","emoji":"","level":"avanzado","alt":[]},{"en":"versatile","es":"versátil","emoji":"","level":"avanzado","alt":[]},{"en":"vulnerable","es":"vulnerable","emoji":"","level":"avanzado","alt":[]},{"en":"resilient","es":"resiliente","emoji":"","level":"avanzado","alt":[]},{"en":"assumption","es":"suposición","emoji":"","level":"avanzado","alt":[]},{"en":"controversy","es":"controversia","emoji":"","level":"avanzado","alt":[]},{"en":"dilemma","es":"dilema","emoji":"","level":"avanzado","alt":[]},{"en":"discrepancy","es":"discrepancia","emoji":"","level":"avanzado","alt":[]},{"en":"framework","es":"marco de trabajo","emoji":"","level":"avanzado","alt":[]},{"en":"hypothesis","es":"hipótesis","emoji":"","level":"avanzado","alt":[]},{"en":"implication","es":"implicación","emoji":"","level":"avanzado","alt":[]},{"en":"incentive","es":"incentivo","emoji":"","level":"avanzado","alt":[]},{"en":"initiative","es":"iniciativa","emoji":"","level":"avanzado","alt":[]},{"en":"integrity","es":"integridad","emoji":"","level":"avanzado","alt":[]},{"en":"methodology","es":"metodología","emoji":"","level":"avanzado","alt":[]},{"en":"paradox","es":"paradoja","emoji":"","level":"avanzado","alt":[]},{"en":"perspective","es":"perspectiva","emoji":"","level":"avanzado","alt":[]},{"en":"phenomenon","es":"fenómeno","emoji":"","level":"avanzado","alt":[]},{"en":"prerequisite","es":"requisito previo","emoji":"","level":"avanzado","alt":[]},{"en":"insight","es":"perspicacia","emoji":"","level":"avanzado","alt":[]},{"en":"ambiguity","es":"ambigüedad","emoji":"","level":"avanzado","alt":[]},{"en":"breakthrough","es":"avance","emoji":"","level":"avanzado","alt":[]},{"en":"consensus","es":"consenso","emoji":"","level":"avanzado","alt":[]},{"en":"constraint","es":"restricción","emoji":"","level":"avanzado","alt":[]},{"en":"bring about","es":"provocar","emoji":"","level":"avanzado","alt":[]},{"en":"carry out","es":"llevar a cabo","emoji":"","level":"avanzado","alt":[]},{"en":"come across","es":"encontrarse con","emoji":"","level":"avanzado","alt":[]},{"en":"come up with","es":"idear","emoji":"","level":"avanzado","alt":[]},{"en":"deal with","es":"lidiar con","emoji":"","level":"avanzado","alt":[]},{"en":"figure out","es":"descifrar","emoji":"","level":"avanzado","alt":[]},{"en":"get along","es":"llevarse bien","emoji":"","level":"avanzado","alt":[]},{"en":"give up","es":"rendirse","emoji":"","level":"avanzado","alt":[]},{"en":"look into","es":"investigar","emoji":"","level":"avanzado","alt":[]},{"en":"make up","es":"inventar","emoji":"","level":"avanzado","alt":[]},{"en":"put off","es":"posponer","emoji":"","level":"avanzado","alt":[]},{"en":"run into","es":"toparse con","emoji":"","level":"avanzado","alt":[]},{"en":"set up","es":"configurar","emoji":"","level":"avanzado","alt":[]},{"en":"take over","es":"tomar el control","emoji":"","level":"avanzado","alt":[]},{"en":"turn down","es":"rechazar","emoji":"","level":"avanzado","alt":[]}]</script>
+<script>
+(function(){
+  "use strict";
+
+  var DICTIONARY = JSON.parse(document.getElementById('dictionary-data').textContent);
+  var LEVEL_LABELS = { basico:'Básico', intermedio:'Intermedio', avanzado:'Avanzado' };
+  var PROGRESS_KEY = 'flashenglish_progress_v1';
+  var view = document.getElementById('view');
+
+  var PROGRESS = {};
+  try{
+    PROGRESS = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
+  }catch(e){ PROGRESS = {}; }
+
+  function saveProgress(){
+    try{ localStorage.setItem(PROGRESS_KEY, JSON.stringify(PROGRESS)); }catch(e){}
+  }
+  function getBox(en){ return PROGRESS[en] || 1; }
+
+  var STATE = {
+    mode: 'word2meaning',   // 'word2meaning' | 'image2word'
+    level: 'mixto',         // 'basico' | 'intermedio' | 'mixto'
+    roundSize: 20,
+    queue: [],
+    index: 0,
+    correctCount: 0,
+    mistakes: [],
+    startTime: 0,
+    elapsedMs: 0,
+    timerId: null,
+    awaitingNext: false,
+    nextTimeoutId: null
+  };
+
+  function normalize(str){
+    return String(str)
+      .trim()
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[.,!?¡¿]/g,'')
+      .replace(/\s+/g,' ');
+  }
+
+  function poolFor(mode, level){
+    var pool = DICTIONARY.filter(function(w){
+      if (level !== 'mixto' && w.level !== level) return false;
+      if (mode === 'image2word' && !w.emoji) return false;
+      return true;
+    });
+    return pool;
+  }
+
+  function weightForWord(w){
+    var box = getBox(w.en);
+    if (box <= 1) return 6;
+    if (box === 2) return 3;
+    return 1;
+  }
+
+  function pickRoundWords(pool, size){
+    var n = Math.min(size, pool.length);
+    var scored = pool.map(function(w){
+      var weight = weightForWord(w);
+      var r = Math.random();
+      var key = Math.pow(r, 1 / weight);
+      return { w: w, key: key };
+    });
+    scored.sort(function(a,b){ return b.key - a.key; });
+    return scored.slice(0, n).map(function(s){ return s.w; });
+  }
+
+  function formatTime(ms){
+    var totalSec = Math.floor(ms/1000);
+    var m = Math.floor(totalSec/60);
+    var s = totalSec % 60;
+    return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  }
+
+  function countMastered(){
+    var c = 0;
+    for (var k in PROGRESS){ if (PROGRESS[k] >= 3) c++; }
+    return c;
+  }
+
+  function clearRoundTimers(){
+    stopTimer();
+    if (STATE.nextTimeoutId){ clearTimeout(STATE.nextTimeoutId); STATE.nextTimeoutId = null; }
+    STATE.awaitingNext = false;
+  }
+
+  // ---------------- HOME ----------------
+  function renderHome(){
+    clearRoundTimers();
+    var pool = poolFor(STATE.mode, STATE.level);
+    var willUse = Math.min(STATE.roundSize, pool.length);
+    var warn = '';
+    if (pool.length < STATE.roundSize){
+      warn = '<div class="pool-warning">Solo hay '+pool.length+' palabras disponibles para esta combinación · la ronda usará '+willUse+'.</div>';
+    }
+
+    view.innerHTML =
+      '<p class="home-lede">Practica vocabulario en inglés básico, intermedio y avanzado con repetición espaciada: las palabras que fallas vuelven antes.</p>'+
+      '<div class="section-label">Modo de juego</div>'+
+      '<div class="mode-grid">'+
+        '<button class="mode-card'+(STATE.mode==='word2meaning'?' selected':'')+'" data-mode="word2meaning">'+
+          '<span class="glyph">🔤</span>'+
+          '<span class="title">Palabra → Significado</span>'+
+          '<span class="desc">Ves la palabra en inglés y escribes su significado en español.</span>'+
+        '</button>'+
+        '<button class="mode-card'+(STATE.mode==='image2word'?' selected':'')+'" data-mode="image2word">'+
+          '<span class="glyph">🖼️</span>'+
+          '<span class="title">Imagen → Palabra</span>'+
+          '<span class="desc">Ves un ícono y escribes la palabra en inglés.</span>'+
+        '</button>'+
+      '</div>'+
+      '<div class="section-label">Nivel</div>'+
+      '<div class="pill-row" id="levelPills">'+
+        pillHtml('basico','Básico', STATE.level)+
+        pillHtml('intermedio','Intermedio', STATE.level)+
+        pillHtml('avanzado','Avanzado', STATE.level)+
+        pillHtml('mixto','Mixto', STATE.level)+
+      '</div>'+
+      '<div class="section-label">Palabras por ronda</div>'+
+      '<div class="pill-row" id="sizePills">'+
+        pillHtml(10,'10', STATE.roundSize)+
+        pillHtml(20,'20', STATE.roundSize)+
+        pillHtml(30,'30', STATE.roundSize)+
+      '</div>'+
+      warn+
+      '<button class="btn-primary" id="startBtn">Empezar ronda</button>'+
+      '<div class="stats-line">Dominadas: '+countMastered()+' / '+DICTIONARY.length+'</div>';
+
+    Array.prototype.forEach.call(document.querySelectorAll('.mode-card'), function(btn){
+      btn.addEventListener('click', function(){
+        STATE.mode = btn.getAttribute('data-mode');
+        renderHome();
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#levelPills .pill'), function(btn){
+      btn.addEventListener('click', function(){
+        STATE.level = btn.getAttribute('data-val');
+        renderHome();
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#sizePills .pill'), function(btn){
+      btn.addEventListener('click', function(){
+        STATE.roundSize = parseInt(btn.getAttribute('data-val'),10);
+        renderHome();
+      });
+    });
+    document.getElementById('startBtn').addEventListener('click', startRound);
+  }
+
+  function pillHtml(val, label, current){
+    var sel = (String(val) === String(current)) ? ' selected' : '';
+    return '<button class="pill'+sel+'" data-val="'+val+'">'+label+'</button>';
+  }
+
+  // ---------------- ROUND ----------------
+  function startRound(){
+    var pool = poolFor(STATE.mode, STATE.level);
+    if (pool.length === 0){ renderHome(); return; }
+    STATE.queue = pickRoundWords(pool, STATE.roundSize);
+    STATE.index = 0;
+    STATE.correctCount = 0;
+    STATE.mistakes = [];
+    STATE.elapsedMs = 0;
+    STATE.startTime = Date.now();
+    startTimer();
+    renderRoundShell();
+    showCard();
+  }
+
+  function startTimer(){
+    stopTimer();
+    STATE.timerId = setInterval(function(){
+      STATE.elapsedMs = Date.now() - STATE.startTime;
+      var t = document.getElementById('liveTimer');
+      if (t) t.textContent = formatTime(STATE.elapsedMs);
+    }, 250);
+  }
+  function stopTimer(){
+    if (STATE.timerId){ clearInterval(STATE.timerId); STATE.timerId = null; }
+  }
+
+  function renderRoundShell(){
+    view.innerHTML =
+      '<div class="round-header">'+
+        '<span id="progressLabel">1 / '+STATE.queue.length+'</span>'+
+        '<span class="timer" id="liveTimer">00:00</span>'+
+        '<span class="score-live" id="scoreLive">✓ 0</span>'+
+      '</div>'+
+      '<div class="card-stack">'+
+        '<div class="ghost g1"></div>'+
+        '<div class="ghost g2"></div>'+
+        '<div class="card" id="card">'+
+          '<div class="card-holes"><span></span><span></span><span></span></div>'+
+          '<div class="level-tag" id="levelTag"></div>'+
+          '<div class="card-body" id="cardBody"></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="feedback-line" id="feedbackLine"></div>'+
+      '<div class="answer-reveal-wrap">'+
+        '<div class="answer-reveal hidden-text" id="answerReveal"></div>'+
+        '<button class="btn-toggle-answer" id="toggleAnswerBtn">Mostrar respuesta</button>'+
+      '</div>'+
+      '<div class="answer-row">'+
+        '<input type="text" class="input-answer" id="answerInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Escribe tu respuesta…">'+
+        '<button class="btn-check" id="checkBtn">Comprobar</button>'+
+      '</div>'+
+      '<div class="next-hint">Enter para comprobar · Enter o el botón para continuar</div>';
+
+    document.getElementById('checkBtn').addEventListener('click', primaryAction);
+    document.getElementById('answerInput').addEventListener('keydown', function(e){
+      if (e.key === 'Enter'){
+        e.preventDefault();
+        primaryAction();
+      }
+    });
+    document.getElementById('toggleAnswerBtn').addEventListener('click', function(){
+      var el = document.getElementById('answerReveal');
+      var hidden = el.classList.toggle('hidden-text');
+      this.textContent = hidden ? 'Mostrar respuesta' : 'Ocultar respuesta';
+    });
+  }
+
+  function primaryAction(){
+    if (STATE.awaitingNext){ advance(); } else { handleSubmit(); }
+  }
+
+  function correctAnswerFor(w){
+    return STATE.mode === 'image2word' ? w.en : w.es;
+  }
+
+  function currentWord(){ return STATE.queue[STATE.index]; }
+
+  function showCard(){
+    STATE.awaitingNext = false;
+    var w = currentWord();
+    var cardEl = document.getElementById('card');
+    cardEl.classList.remove('is-correct','is-wrong');
+    document.getElementById('levelTag').textContent = LEVEL_LABELS[w.level] || w.level;
+    var body = document.getElementById('cardBody');
+    if (STATE.mode === 'image2word'){
+      body.innerHTML = '<div class="card-emoji">'+w.emoji+'</div>';
+    } else {
+      body.innerHTML = '<div class="card-word">'+escapeHtml(w.en)+'</div>';
+    }
+    document.getElementById('feedbackLine').textContent = '';
+    document.getElementById('feedbackLine').className = 'feedback-line';
+    var revealEl = document.getElementById('answerReveal');
+    revealEl.textContent = correctAnswerFor(w);
+    revealEl.classList.add('hidden-text');
+    document.getElementById('toggleAnswerBtn').textContent = 'Mostrar respuesta';
+    document.getElementById('progressLabel').textContent = (STATE.index+1)+' / '+STATE.queue.length;
+    document.getElementById('scoreLive').textContent = '✓ '+STATE.correctCount;
+    var input = document.getElementById('answerInput');
+    input.value = '';
+    input.readOnly = false;
+    input.focus();
+    var btn = document.getElementById('checkBtn');
+    btn.textContent = 'Comprobar';
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function handleSubmit(){
+    if (STATE.awaitingNext) return;
+    var w = currentWord();
+    var input = document.getElementById('answerInput');
+    var raw = input.value;
+
+    var acceptable;
+    if (STATE.mode === 'image2word'){
+      acceptable = [normalize(w.en)];
+    } else {
+      acceptable = [normalize(w.es)].concat((w.alt||[]).map(normalize));
+    }
+    var ok = acceptable.indexOf(normalize(raw)) !== -1;
+
+    var box = getBox(w.en);
+    PROGRESS[w.en] = ok ? Math.min(box + 1, 3) : 1;
+    saveProgress();
+
+    var cardEl = document.getElementById('card');
+    var fb = document.getElementById('feedbackLine');
+    var delay;
+    if (ok){
+      STATE.correctCount++;
+      cardEl.classList.add('is-correct');
+      fb.className = 'feedback-line correct';
+      fb.textContent = '¡Correcto!';
+      delay = 1200;
+    } else {
+      STATE.mistakes.push(w);
+      cardEl.classList.add('is-wrong');
+      fb.className = 'feedback-line wrong';
+      fb.textContent = 'Incorrecto';
+      var revealEl = document.getElementById('answerReveal');
+      revealEl.classList.remove('hidden-text');
+      document.getElementById('toggleAnswerBtn').textContent = 'Ocultar respuesta';
+      delay = 5000;
+    }
+    document.getElementById('scoreLive').textContent = '✓ '+STATE.correctCount;
+    input.readOnly = true;
+    document.getElementById('checkBtn').textContent = 'Siguiente →';
+    STATE.awaitingNext = true;
+    STATE.nextTimeoutId = setTimeout(advance, delay);
+  }
+
+  function advance(){
+    if (STATE.nextTimeoutId){ clearTimeout(STATE.nextTimeoutId); STATE.nextTimeoutId = null; }
+    STATE.index++;
+    if (STATE.index >= STATE.queue.length){
+      finishRound();
+    } else {
+      showCard();
+    }
+  }
+
+  // ---------------- RESULT ----------------
+  function finishRound(){
+    stopTimer();
+    STATE.elapsedMs = Date.now() - STATE.startTime;
+    var total = STATE.queue.length;
+    var acc = total ? Math.round((STATE.correctCount/total)*100) : 0;
+
+    var missedHtml = '';
+    if (STATE.mistakes.length === 0){
+      missedHtml = '<p class="empty-mistakes">Ronda perfecta, ninguna palabra fallada.</p>';
+    } else {
+      var chips = STATE.mistakes.map(function(w){
+        return '<div class="missed-chip"><b>'+escapeHtml(w.en)+'</b> <span class="es">— '+escapeHtml(w.es)+'</span></div>';
+      }).join('');
+      missedHtml = '<div class="missed-wrap"><div class="section-label">Para repasar</div><div class="missed-list">'+chips+'</div></div>';
+    }
+
+    view.innerHTML =
+      '<div class="result-hero">'+
+        '<div class="big">'+STATE.correctCount+' / '+total+'</div>'+
+        '<div class="sub">'+acc+'% de aciertos</div>'+
+      '</div>'+
+      '<div class="result-stats">'+
+        '<div class="result-stat"><div class="v">'+formatTime(STATE.elapsedMs)+'</div><div class="l">tiempo</div></div>'+
+        '<div class="result-stat"><div class="v">'+STATE.mistakes.length+'</div><div class="l">falladas</div></div>'+
+        '<div class="result-stat"><div class="v">'+countMastered()+'</div><div class="l">dominadas</div></div>'+
+      '</div>'+
+      missedHtml+
+      '<button class="btn-primary" id="replayBtn">Jugar de nuevo</button>'+
+      '<button class="btn-secondary" id="homeBtn">Cambiar modo / nivel</button>';
+
+    document.getElementById('replayBtn').addEventListener('click', startRound);
+    document.getElementById('homeBtn').addEventListener('click', renderHome);
+  }
+
+  // ---------------- NAV ----------------
+  document.getElementById('brandBtn').addEventListener('click', renderHome);
+
+  // ---------------- RESET ----------------
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if (confirm('¿Borrar todo el progreso guardado (cajas de repaso)?')){
+      PROGRESS = {};
+      saveProgress();
+      renderHome();
+    }
+  });
+
+  renderHome();
+})();
+
+</script>
+</body>
+</html>
