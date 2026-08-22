@@ -410,6 +410,27 @@
     color:var(--good);
     margin:0 4px;
   }
+
+  /* ---------- MOBILE COMPACTO (para que quepa todo con el teclado abierto) ---------- */
+  html{ scroll-behavior:smooth; }
+  @media (max-width:480px){
+    #app{ padding:12px 10px 20px; }
+    .topbar{ margin-bottom:10px; }
+    .round-header{ margin:0 4px 10px; font-size:12px; }
+    .answer-reveal-wrap{ margin:0 4px 10px; }
+    .answer-reveal{ font-size:20px; padding:9px 12px; }
+    .btn-toggle-answer{ font-size:11.5px; padding:6px 12px; margin-top:6px; }
+    .card-stack{ height:170px; margin:2px 6px 12px; }
+    .card{ padding:12px; }
+    .card-word{ font-size:26px; }
+    .card-emoji{ font-size:58px; }
+    .level-tag{ font-size:9px; padding:3px 8px; margin-left:18px; }
+    .feedback-line{ margin:0 4px 6px; min-height:14px; font-size:12px; }
+    .answer-row{ margin:0 4px; }
+    .input-answer{ padding:11px 12px; font-size:16px; }
+    .btn-check{ padding:0 14px; font-size:13.5px; }
+    .next-hint{ margin-top:6px; font-size:9.5px; }
+  }
 </style>
 </head>
 <body>
@@ -614,6 +635,10 @@
         '<span class="timer" id="liveTimer">00:00</span>'+
         '<span class="score-live" id="scoreLive">✓ 0</span>'+
       '</div>'+
+      '<div class="answer-reveal-wrap">'+
+        '<div class="answer-reveal hidden-text" id="answerReveal"></div>'+
+        '<button class="btn-toggle-answer" id="toggleAnswerBtn">Mostrar respuesta</button>'+
+      '</div>'+
       '<div class="card-stack">'+
         '<div class="ghost g1"></div>'+
         '<div class="ghost g2"></div>'+
@@ -624,10 +649,6 @@
         '</div>'+
       '</div>'+
       '<div class="feedback-line" id="feedbackLine"></div>'+
-      '<div class="answer-reveal-wrap">'+
-        '<div class="answer-reveal hidden-text" id="answerReveal"></div>'+
-        '<button class="btn-toggle-answer" id="toggleAnswerBtn">Mostrar respuesta</button>'+
-      '</div>'+
       '<div class="answer-row">'+
         '<input type="text" class="input-answer" id="answerInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Escribe tu respuesta…">'+
         '<button class="btn-check" id="checkBtn">Comprobar</button>'+
@@ -635,11 +656,18 @@
       '<div class="next-hint">Enter para comprobar · Enter o el botón para continuar</div>';
 
     document.getElementById('checkBtn').addEventListener('click', primaryAction);
-    document.getElementById('answerInput').addEventListener('keydown', function(e){
+    var answerInputEl = document.getElementById('answerInput');
+    answerInputEl.addEventListener('keydown', function(e){
       if (e.key === 'Enter'){
         e.preventDefault();
         primaryAction();
       }
+    });
+    answerInputEl.addEventListener('focus', function(){
+      var el = this;
+      setTimeout(function(){
+        el.scrollIntoView({ block:'center', behavior:'smooth' });
+      }, 250);
     });
     document.getElementById('toggleAnswerBtn').addEventListener('click', function(){
       var el = document.getElementById('answerReveal');
