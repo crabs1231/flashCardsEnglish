@@ -708,7 +708,6 @@
     document.getElementById('scoreLive').textContent = '✓ '+STATE.correctCount;
     var input = document.getElementById('answerInput');
     input.value = '';
-    input.readOnly = false;
     input.focus();
     var btn = document.getElementById('checkBtn');
     btn.textContent = 'Comprobar';
@@ -755,10 +754,9 @@
       var revealEl = document.getElementById('answerReveal');
       revealEl.classList.remove('hidden-text');
       document.getElementById('toggleAnswerBtn').textContent = 'Ocultar respuesta';
-      delay = 5000;
+      delay = 3000;
     }
     document.getElementById('scoreLive').textContent = '✓ '+STATE.correctCount;
-    input.readOnly = true;
     document.getElementById('checkBtn').textContent = 'Siguiente →';
     STATE.awaitingNext = true;
     STATE.nextTimeoutId = setTimeout(advance, delay);
